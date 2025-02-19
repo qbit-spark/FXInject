@@ -1,6 +1,5 @@
 package com.fxinject.utils;
 
-
 import com.fxinject.annotations.Component;
 import com.fxinject.exceptions.FXInjectException;
 import org.reflections.Reflections;

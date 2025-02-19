@@ -1,27 +1,44 @@
 package com.fxinject.core;
 
+import com.fxinject.annotations.EnableFxInject;
 import com.fxinject.utils.FXInjectContainer;
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 
-/**
- * Facade class to simplify the usage of FXInject library.
- */
+import java.io.IOException;
+import java.net.URL;
+
 public class FXInject {
-    /**
-     * Creates a new dependency injection container.
-     *
-     * @return FXInjectContainer instance
-     */
-    public static FXInjectContainer createContainer() {
-        return new FXInjectContainer();
+    private static FXInjectContainer container;
+
+    public static void initializeForApplication(Application application) {
+        Class<?> appClass = application.getClass();
+        EnableFxInject annotation = appClass.getAnnotation(EnableFxInject.class);
+
+        if (annotation != null) {
+            container = new FXInjectContainer();
+            String[] basePackages = annotation.basePackages();
+            if (basePackages.length > 0) {
+                for (String basePackage : basePackages) {
+                    container.scan(basePackage);
+                }
+            } else {
+                container.scan(appClass.getPackage().getName());
+            }
+        }
     }
 
-    /**
-     * Creates an FXML loader with the given container.
-     *
-     * @param container The dependency injection container
-     * @return FXMLDILoader instance
-     */
-    public static FXMLDILoader createFXMLLoader(FXInjectContainer container) {
-        return new FXMLDILoader(container);
+    public static FXMLLoader createFXMLLoader(URL location) {
+        if (container == null) {
+            throw new IllegalStateException("FXInject has not been initialized. Make sure your Application class is annotated with @EnableFxInject.");
+        }
+        FXMLLoader loader = new FXMLLoader(location);
+        loader.setControllerFactory(container::getComponent);
+        return loader;
+    }
+
+    public static Parent loadFXML(URL location) throws IOException {
+        return createFXMLLoader(location).load();
     }
 }
