@@ -20,7 +20,7 @@ Add to your `pom.xml`:
 <dependency>
     <groupId>com.fxinject</groupId>
     <artifactId>fxinject</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.2</version>
 </dependency>
 
 <repositories>
