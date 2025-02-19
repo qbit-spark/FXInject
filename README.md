@@ -36,7 +36,7 @@ Add to your `pom.xml`:
 
 ```mermaid
 flowchart TD
-    A[JavaFX Application] -->|Initialize|(FXInject.initializeForApplication)
+    A[JavaFX Application] -->|Initialize| B(FXInject.initializeForApplication)
     B --> C{FXInjectContainer}
     C -->|Scan packages| D[ClassPathScanner]
     D -->|Return component classes| C
