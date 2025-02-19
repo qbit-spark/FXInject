@@ -26,8 +26,8 @@ Add to your `pom.xml`:
 <repositories>
     <repository>
         <id>github</id>
-        <name>GitHub KIBUTI-BOT Apache Maven Packages</name>
-        <url>https://maven.pkg.github.com/KIBUTI-BOT/FXInject</url>
+        <name>GitHub KIBUTI-SOFTWARE Apache Maven Packages</name>
+        <url>https://maven.pkg.github.com/KIBUTI-SOFTWARE/FXInject</url>
     </repository>
 </repositories>
 ```
