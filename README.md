@@ -1,18 +1,21 @@
-# FXInject - Lightweight Dependency Injection for JavaFX
 
-## 🚀 Overview
-FXInject is a simple, lightweight dependency injection library designed specifically for JavaFX applications. It provides an easy-to-use mechanism for managing dependencies and improving the modularity of your JavaFX projects.
+# 🚀 FXInject - JavaFX Apps with Easy Dependency Injection
+
+FXInject is a lightweight, powerful dependency injection framework designed specifically for JavaFX applications. It simplifies your code, promotes modularity, and makes your JavaFX projects more maintainable.
 
 ## ✨ Features
-- Simple annotation-based dependency injection
-- Seamless integration with JavaFX
-- Minimal configuration required
-- Supports field-level injection
-- Lightweight and easy to use
 
-## 📦 Installation
-### Maven Dependency
-Add the following to your `pom.xml`:
+- 🧩 Simple annotation-based dependency injection
+- 🔗 Seamless integration with JavaFX
+- 🎛️ Minimal configuration required
+- 💉 Supports field-level injection
+- 🔍 Automatic component scanning
+- 📄 FXML integration
+
+## 🛠️ Installation
+
+Add to your `pom.xml`:
+
 ```xml
 <dependency>
     <groupId>com.fxinject</groupId>
@@ -29,15 +32,32 @@ Add the following to your `pom.xml`:
 </repositories>
 ```
 
-## 🎯 Quick Start
+## 🔄 How It Works
 
-### 1. Mark Your Components
-Use `@Component` to mark your classes for dependency injection:
+```mermaid
+flowchart TD
+    A[JavaFX Application] -->|1. Initialize| B(FXInject.initializeForApplication)
+    B --> C{FXInjectContainer}
+    C -->|Scan packages| D[ClassPathScanner]
+    D -->|Return component classes| C
+    C -->|Instantiate components| E[Component Instances]
+    C -->|Inject dependencies| E
+    A -->|Load FXML| F(FXInject.loadFXML)
+    F -->|Create| G[FXMLLoader]
+    G -->|Set controller factory| C
+    G -->|Load FXML and create UI| H[JavaFX Scene Graph]
+    C -->|Provide controller instance| G
+    H -->|Populated Scene| A
+```
+
+## 🚀 Quick Start
+
+1. Mark components:
 
 ```java
 @Component
 public class UserService {
-    // Your service implementation
+    // Service implementation
 }
 
 @Component
@@ -47,26 +67,21 @@ public class MainController {
     
     @FXML
     private void initialize() {
-        // Your controller initialization
+        // Controller initialization
     }
 }
 ```
 
-### 2. Setup in Main Application
-Initialize FXInject in your JavaFX application:
+2. Setup in main application:
 
 ```java
 public class MainApplication extends Application {
     @Override
     public void start(Stage primaryStage) {
-        // Create and initialize container
         FXInjectContainer container = FXInject.createContainer();
-        container.scan(); // Scans current package for components
+        container.scan();
         
-        // Create FXML loader with DI support
         FXMLDILoader loader = FXInject.createFXMLLoader(container);
-        
-        // Load your FXML
         Parent root = loader.load(getClass().getResource("/fxml/main.fxml"));
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
@@ -74,127 +89,72 @@ public class MainApplication extends Application {
 }
 ```
 
-## 💡 Key Concepts
+## ⚠️ Important Note
 
-### Component Registration
-Mark your classes with `@Component`:
+If you're using the Java Platform Module System (JPMS), update your `module-info.java`:
+
 ```java
-@Component
-public class DataService {
-    // Your implementation
+module your.module.name {
+    requires javafx.controls;
+    requires javafx.fxml;
+    requires fxinject;
+
+    opens your.package.name to javafx.fxml, fxinject;
+    exports your.package.name;
 }
 ```
 
-### Dependency Injection
-Use `@Inject` or `@Autowired` for injection:
-```java
-@Component
-public class MainController {
-    @Inject
-    private DataService dataService;
-    
-    @Autowired // Alternative annotation
-    private UserService userService;
-}
-```
+This ensures FXInject can access your classes for dependency injection.
 
-### FXML Integration
-Your FXML files work seamlessly with FXInject:
-```xml
-<?xml version="1.0" encoding="UTF-8"?>
-<?import javafx.scene.layout.VBox?>
-<VBox fx:controller="com.example.MainController"
-      xmlns:fx="http://javafx.com/fxml">
-    <!-- Your FXML content -->
-</VBox>
-```
+## 📚 Example
 
-## 🔧 Additional Features
-
-### Package Scanning
-Scan specific packages:
-```java
-container.scan("com.example.app");
-```
-
-### Manual Component Retrieval
-Get components directly from container:
-```java
-UserService service = container.getComponent(UserService.class);
-```
-
-## ⚠️ Error Handling
-
-FXInject provides a dedicated exception class `FXInjectException` that wraps all library-related errors:
-
-```java
-try {
-    container.scan();
-} catch (FXInjectException e) {
-    logger.error("Dependency injection failed", e);
-    // Handle error appropriately
-}
-```
-
-Common scenarios that throw `FXInjectException`:
-- Component instantiation failures
-- Missing required dependencies
-- Invalid package scanning
-- FXML loading errors
-- Circular dependencies
-- Invalid component configuration
-
-Example error handling with specific cases:
-```java
-try {
-    // Create and initialize container
-    FXInjectContainer container = FXInject.createContainer();
-    container.scan("com.example.app");
-    
-    // Load FXML with dependency injection
-    FXMLDILoader loader = FXInject.createFXMLLoader(container);
-    Parent root = loader.load(getClass().getResource("/fxml/main.fxml"));
-} catch (FXInjectException e) {
-    if (e.getMessage().contains("No component found")) {
-        logger.error("Missing required dependency", e);
-        // Handle missing dependency
-    } else if (e.getMessage().contains("Failed to scan package")) {
-        logger.error("Package scanning failed", e);
-        // Handle scanning error
-    } else {
-        logger.error("Unexpected injection error", e);
-        // Handle other errors
-    }
-}
-```
-## 📝 Example Project Structure
-
-
-src/
-├── main/
-│   ├── java/
-│   │   └── com/example/
-│   │       ├── MainApplication.java
-│   │       ├── controllers/
-│   │       │   └── MainController.java
-│   │       └── services/
-│   │           └── UserService.java
-│   └── resources/
-│       └── fxml/
-│           └── main.fxml
-
-
+For a complete example, visit our [GitHub repository](https://github.com/KIBUTI-BOT/FXInject/tree/main/example).
 
 ## 🤝 Contributing
-Contributions are welcome! Feel free to:
-- Submit issues
-- Fork the repository
-- Submit pull requests
 
-## 📄 License
-This project is licensed under the MIT License - see the LICENSE file for details.
+We welcome contributions to FXInject! Here's how you can help:
 
-## 🔗 Links
-- [GitHub Repository](https://github.com/KIBUTI-BOT/FXInject)
-- [Issue Tracker](https://github.com/KIBUTI-BOT/FXInject/issues)
-- [Documentation](https://github.com/KIBUTI-BOT/FXInject/wiki)
+1. **Fork the Repository**: Start by forking the [FXInject repository](https://github.com/KIBUTI-BOT/FXInject) on GitHub.
+
+2. **Clone Your Fork**: 
+   ```
+   git clone https://github.com/your-username/FXInject.git
+   ```
+
+3. **Create a Branch**: 
+   ```
+   git checkout -b feature/your-feature-name
+   ```
+
+4. **Make Your Changes**: Implement your feature or bug fix.
+
+5. **Test Your Changes**: Ensure your changes don't break any existing functionality.
+
+6. **Commit Your Changes**:
+   ```
+   git commit -m "Add a brief description of your changes"
+   ```
+
+7. **Push to Your Fork**:
+   ```
+   git push origin feature/your-feature-name
+   ```
+
+8. **Submit a Pull Request**: Go to the FXInject repository and submit a pull request with a clear description of your changes.
+
+### Reporting Issues
+
+If you find a bug or have a suggestion for improvement:
+
+1. Check if the issue already exists in the [issue tracker](https://github.com/KIBUTI-BOT/FXInject/issues).
+2. If not, create a new issue with a clear title and description.
+3. Include steps to reproduce the issue if it's a bug.
+
+Thank you for contributing to FXInject! 🎉
+
+## 🔗 Useful Links
+
+- [📦 GitHub Repository](https://github.com/KIBUTI-BOT/FXInject)
+- [📖 Documentation](https://github.com/KIBUTI-BOT/FXInject/wiki)
+- [🐛 Issue Tracker](https://github.com/KIBUTI-BOT/FXInject/issues)
+
