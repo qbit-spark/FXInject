@@ -78,21 +78,39 @@ public class FXInjectContainer {
      * @param clazz The class to find a constructor for
      * @return The selected constructor
      */
+//    private Constructor<?> findInjectableConstructor(Class<?> clazz) {
+//        Constructor<?>[] constructors = clazz.getConstructors();
+//        Optional<Constructor<?>> annotatedConstructor = Arrays.stream(constructors)
+//                .filter(constructor ->
+//                        constructor.isAnnotationPresent(Inject.class) ||
+//                                constructor.isAnnotationPresent(Autowired.class))
+//                .findFirst();
+//
+//        return annotatedConstructor.orElseGet(() -> {
+//            try {
+//                return clazz.getConstructor();
+//            } catch (NoSuchMethodException e) {
+//                return clazz.getConstructors()[0];
+//            }
+//        });
+//    }
+
+
     private Constructor<?> findInjectableConstructor(Class<?> clazz) {
-        Constructor<?>[] constructors = clazz.getConstructors();
+        Constructor<?>[] constructors = clazz.getDeclaredConstructors();
         Optional<Constructor<?>> annotatedConstructor = Arrays.stream(constructors)
                 .filter(constructor ->
                         constructor.isAnnotationPresent(Inject.class) ||
                                 constructor.isAnnotationPresent(Autowired.class))
                 .findFirst();
 
-        return annotatedConstructor.orElseGet(() -> {
-            try {
-                return clazz.getConstructor();
-            } catch (NoSuchMethodException e) {
-                return clazz.getConstructors()[0];
-            }
-        });
+        if (annotatedConstructor.isPresent()) {
+            return annotatedConstructor.get();
+        } else if (constructors.length > 0) {
+            return constructors[0];
+        } else {
+            throw new FXInjectException("No suitable constructor found for class: " + clazz.getName());
+        }
     }
 
     /**
