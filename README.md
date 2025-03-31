@@ -1,7 +1,7 @@
 
 # 🚀 FXInject - JavaFX Apps with Easy Dependency Injection
 
-FXInject is a lightweight, powerful dependency injection framework designed specifically for JavaFX applications. It simplifies your code, promotes modularity, and makes your JavaFX projects more maintainable.
+FXInject is an open source lightweight, powerful dependency injection framework designed specifically for JavaFX applications. It simplifies your code, promotes modularity, and makes your JavaFX projects more maintainable.
 
 ## ✨ Features
 
