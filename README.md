@@ -108,17 +108,17 @@ This ensures FXInject can access your classes for dependency injection.
 
 ## 📚 Example
 
-For a complete example, visit our [GitHub repository](https://github.com/KIBUTI-BOT/FXInject/tree/main/example).
+For a complete example, visit our [GitHub repository](https://github.com/qbit-spark/FXInject/tree/main/example).
 
 ## 🤝 Contributing
 
 We welcome contributions to FXInject! Here's how you can help:
 
-1. **Fork the Repository**: Start by forking the [FXInject repository](https://github.com/KIBUTI-BOT/FXInject) on GitHub.
+1. **Fork the Repository**: Start by forking the [FXInject repository](https://github.com/qbit-spark/FXInject) on GitHub.
 
 2. **Clone Your Fork**: 
    ```
-   git clone https://github.com/your-username/FXInject.git
+   git clone https://github.com/qbit-spark/FXInject.git
    ```
 
 3. **Create a Branch**: 
